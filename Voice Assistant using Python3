@@ -1,0 +1,106 @@
+#In this project, we will be creating voice assistant using Jupyter Notebook..
+#Firstly we need to download and import some libraries..
+#Install these libraries in Terminal
+#pip install wolframalpha
+#pip install pyttsx3
+#pip install wikipedia
+#pip install SpeechRecognition
+#pip install capture
+#pip install pyjokes
+#pip install twilio
+#pip install requests 
+#pip install beautifulsoup4
+#After installing libraries..Import them using below code..
+import speech_recognition 
+import datetime 
+import wikipedia
+import webbrowser
+import requests
+import playsound  
+from gtts import gTTS 
+import os 
+import wolframalpha
+from selenium import webdriver
+def talk():
+    input=sr.Recognizer()
+    with sr.Microphone() as source:
+        audio=input.listen(source)
+        data=""
+        try:
+            data=input.recognize_google(audio)
+            print("Your question is, " + data)
+            
+        except sr.UnknownValueError:
+            print("Sorry I did not hear your question, Please repeat again.")
+    return data
+def respond(output):
+    num=0
+    print(output)
+    num += 1
+    response=gTTS(text=output, lang='en')
+    file = str(num)+".mp3"
+    response.save(file)
+    playsound.playsound(file, True)
+    os.remove(file)
+if __name__=='__main__':
+    respond("Hi, I am SIRI your personal desktop assistant")
+          
+    while(1):
+        respond("How can I help you?")
+        text=talk().lower()
+        
+        if text==0:
+            continue
+            
+        if "Stop" in str(text) or "exit" in str(text) or "bye" in str(text):
+            respond("Ok bye and take care")
+            break
+            
+        if 'Wikipedia' in text:
+            respond('Searching Wikipedia')
+            text =text.replace("wikipedia", "")
+            results = wikipedia.summary(text, sentences=3)
+            respond("According to Wikipedia")
+            print(results)
+            respond(results)
+                  
+        elif 'Time' in text:
+            strTime=datetime.datetime.now().strftime("%H:%M:%S")
+            respond(f"the time is {strTime}")     
+        
+        elif 'Search'  in text:
+            text = text.replace("search", "")
+            webbrowser.open_new_tab(text)
+            time.sleep(5)
+        
+        elif "Calculate" or "what is" in text: 
+            question=talk()
+            app_id="Mention your API Key"
+            client = wolframalpha.Client(app_id)
+            res = client.query(question)
+            answer = next(res.results).text
+            respond("The answer is " + answer)
+            
+        elif 'Open Google' in text:
+            webbrowser.open_new_tab("https://www.google.com")
+            respond("Google is open")
+            time.sleep(5)
+            
+        elif 'Open YouTube' in text: 
+            driver = webdriver.Chrome(r"Mention your webdriver location") 
+            driver.implicitly_wait(1) 
+            driver.maximize_window()
+            respond("Opening in youtube") 
+            indx = text.split().index('youtube') 
+            query = text.split()[indx + 1:] 
+            driver.get("http://www.youtube.com/results?search_query =" + '+'.join(query))              
+                
+        elif "Open Word" in text: 
+            respond("Opening Microsoft Word") 
+            os.startfile('Mention location of Word in your system') 
+        
+        else:
+           respond("Application not available") 
+  #To check whether this code is working or not, speak Open Google or Open YouTube, new tab should be popping up on your browser.
+        
+        

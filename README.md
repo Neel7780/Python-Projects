@@ -4,7 +4,7 @@
 - 📚 I am currently in DAIICT pursuing BTech in ICT'28...
 - 😁 I will be uploading some Python 3 projects to help out coders..
 - 📝 I personally use Jupyter Notebook and Virtual Studio Code to code...
--
+
 
 
 <!---
